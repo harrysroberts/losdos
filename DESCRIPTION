@@ -1,0 +1,21 @@
+Package: losdos
+Title: Level-of-Service Attribute Estimation Using dodgr with the Ordnance Survey Multimodal Routing Network
+Version: 0.1.0
+Authors@R: 
+    person("Harry", "Roberts", , "ts22hr@leeds.ac.uk", role = c("aut", "cre"))
+Description: Computes distance and time estimates by walk, bicycle and car for origin-destination pairs using the Ordnance Survey Multimodal Routing Network with slope-aware walk/bike models and turn-restricted car routing.
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    dplyr,
+    purrr,
+    stringr,
+    sf,
+    tidyr,
+    rlang,
+    dodgr,
+    igraph
+Suggests:
+    testthat (>= 3.0.0)

@@ -1,0 +1,9 @@
+*.Rproj
+.Rproj.user
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+input/
+output/
+misc/
