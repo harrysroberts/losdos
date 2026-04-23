@@ -44,11 +44,11 @@ library(losdos)
 # Prepare your trips dataset
 trips <- data.frame(
   trip_id = c(1, 2, 3),
-  period = c("MoFr09001200", "MoFr09001200", "SaSu14001900"),
-  from_easting = c(432500, 432600, 432700),
-  from_northing = c(434200, 434300, 434400),
-  to_easting = c(432700, 432800, 432900),
-  to_northing = c(434400, 434500, 434600)
+  period = c("MoFr09001200", "MoFr19002200", "SaSu14001900"),
+  from_easting = c(429180, 427750, 435741),
+  from_northing = c(434731, 435747, 432124),
+  to_easting = c(429906, 430454, 430731),
+  to_northing = c(433271, 433532, 441858)
 )
 
 # Compute mode and time-specific routing attributes
