@@ -32,4 +32,5 @@ for each time period
 This function generates links connecting into the destination of each trip
 in the\code{trips} dataset from each modal network corresponding to the time
 period of the trip
-}\keyword{internal}
+}
+\keyword{internal}

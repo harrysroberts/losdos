@@ -1,2 +1,9 @@
 ^losdos\.Rproj$
 ^\.Rproj\.user$
+^input$
+^\.gitignore$
+^\.Rhistory$
+^misc$
+^\.github$
+^\.DS_Store$
+^Thumbs\.db$

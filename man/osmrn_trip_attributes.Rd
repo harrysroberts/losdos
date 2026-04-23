@@ -35,7 +35,7 @@ graph is weighted by time for routing; distance is summed along the same path).
 }
 \examples{
 \dontrun{
- # Requires OSMRN data files in input/raw/ directory
+ # Requires OS MRN data files in input/raw/ directory
  trips <- data.frame(
    trip_id = c(1, 2),
    period = c("MoFr09001200", "MoFr09001200"),
@@ -44,11 +44,12 @@ graph is weighted by time for routing; distance is summed along the same path).
    to_easting = c(432700, 432800),
    to_northing = c(434400, 434500)
  )
-
+ 
  results <- osmrn_trip_attributes(
    trips,
    walk_speed = 4.824,
    bike_speed = 21.636
  )
 }
+
 }
