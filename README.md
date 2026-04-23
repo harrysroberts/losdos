@@ -7,9 +7,10 @@
 `losdos` is an R package that computes distance and time estimates for origin-destination pairs across multiple transportation modes (walk, bicycle, and car) using the UK Ordnance Survey Multimodal Routing Network (OSMRN). 
 
 The package incorporates:
+
+- **Time-varying and traffic-sensitive car speeds** across 14 different time periods, based on real average speed data
 - **Slope-aware walk times** (Weidmann model)
-- **Slope-aware bike times** (Parkin-Rotheram model)
-- **Time-varying car speeds** across 14 different time periods
+- **Slope-aware bike times** (Parkin-Rotheram model) that are **traffic-sensitive** and include the **option to walk-and-push**
 - **Turn restrictions** integrated from the OSMRN
 - **Minimum-time routing** via the `dodgr` package
 
@@ -58,10 +59,14 @@ results <- osmrn_trip_attributes(
   bike_speed = 21.636      # km/h (default MatSim value)
 )
 
-# View results
-head(results)
-```
+# View output
+results
 
+#   trip_id       period ... walk_distance walk_time bike_distance bike_time car_distance car_time
+# 1       1 MoFr09001200 ...      2143.134  26.32291      2145.671  10.09154     2588.870 10.59448
+# 2       2 MoFr19002200 ...      4226.703  52.46928      4079.125  14.82283     4181.384 10.42310
+# 3       3 SaSu14001900 ...     13172.694 164.69240     13061.157  44.89270    15626.795 28.32776
+```
 ### Input Requirements
 
 The `trips` data frame must include:
@@ -119,10 +124,9 @@ working_directory/
 ```
 
 The first call to `osmrn_trip_attributes()` will automatically:
-1. Process the raw OS-MRN files
+1. Process the raw OSMRN files
 2. Filter to your study area boundary
-3. Compute slope-adjusted walk and bike times
-4. Expand car speeds by time period
+3. Compute walk, bike and car distance and time attributes for each trip
 5. Cache the processed networks in `input/processed/`
 
 Subsequent calls will reuse the cached data for speed.
@@ -130,16 +134,16 @@ Subsequent calls will reuse the cached data for speed.
 ## Package Functions
 
 ### Main Function
-- **`osmrn_trip_attributes()`** — Compute distance and time for origin-destination pairs
+- **`osmrn_trip_attributes()`** — Compute distance and time by each mode for origin-destination pairs
 
 ### Internal Functions
 - `create_base_network()` — Build base network with all time-of-day variations
-- `generate_modal_networks()` — Extract modal (walk/bike/car) networks
-- `generate_origin_links()` — Connect trip origins to the network
-- `generate_destination_links()` — Connect trip destinations to the network
-- `generate_augmented_networks()` — Append origin/destination links to networks
+- `generate_modal_networks()` — Extract modal (walk/bike/car) networks, one for each time period in the case of bike and car
+- `generate_origin_links()` — Create links connecting trip origins to the nearest network node
+- `generate_destination_links()` — Create links connecting trip destinations to the nearest network node
+- `generate_augmented_networks()` — Append origin/destination links to each modal network
 - `generate_dual_networks()` — Convert to dual representation with turn restrictions
-- `compute_attributes()` — Compute distance/time via dodgr routing
+- `compute_attributes()` — Compute distance/time by each mode via dodgr routing
 
 ## References
 
