@@ -20,8 +20,7 @@ All distances and times are computed along minimum-time paths and returned in st
 ### Prerequisites
 
 You will need:
-- **R** >= 4.0
-- **GDAL** and **GEOS** libraries (for `sf` spatial operations)
+- **R** version 4.0 or above
 - OSMRN data files: `osmrn.gpkg` — OS Multimodal Routing Network (GeoPackage format)
 - Study area boundary `boundary.gpkg` —  (GeoPackage format, EPSG:27700 (BNG))
 
