@@ -27,15 +27,10 @@
 generate_destination_links <- function(trips,modal_networks,walk_speed) {
   
   # ------------------------------------------------------------
-  # Define time periods
+  # Define time periods present in the modal networks
   # ------------------------------------------------------------
   
-  time_periods <- c(
-    "MoFr04000700", "MoFr07000900", "MoFr09001200", "MoFr12001400",
-    "MoFr14001600", "MoFr16001900", "MoFr19002200", "MoFr22000400",
-    "SaSu04000700", "SaSu07001000", "SaSu10001400", "SaSu14001900",
-    "SaSu19002200", "SaSu22000400"
-  )
+  time_periods <- names(modal_networks$bike)
   
   # ------------------------------------------------------------
   # Get links connecting origins to the nearest network node
@@ -75,9 +70,9 @@ generate_destination_links <- function(trips,modal_networks,walk_speed) {
   
   list(
     walk = get_destination_links(modal_networks$walk),
-    bike = map(time_periods, ~ get_destination_links(modal_networks$bike[[.x]],.x)) %>% 
+    bike = map(time_periods, ~ get_destination_links(modal_networks$bike[[.x]], .x)) %>% 
       set_names(time_periods),
-    car = map(time_periods, ~ get_destination_links(modal_networks$car[[.x]],.x)) %>% 
+    car = map(time_periods, ~ get_destination_links(modal_networks$car[[.x]], .x)) %>% 
       set_names(time_periods)
   )
   

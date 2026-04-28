@@ -9,6 +9,9 @@
 #' containing the modal networks for each mode and time-period.
 #'
 #' @param base_network The full network edge table containing travel times.
+#' @param periods Optional character vector of periods to generate modal networks for.
+#'   Defaults to all supported time periods. Only periods present in the trips
+#'   dataset should be requested.
 #'
 #' @return A named list containing:
 #'   - walk: a single modal network
@@ -20,18 +23,53 @@
 #' @import dplyr
 #' @import purrr
 #' @import stringr
-generate_modal_networks <- function(base_network) {
+generate_modal_networks <- function(base_network, periods = NULL) {
   
   # ------------------------------------------------------------
-  # Define time periods
+  # Define supported time periods
   # ------------------------------------------------------------
   
-  time_periods <- c(
+  default_periods <- c(
     "MoFr04000700", "MoFr07000900", "MoFr09001200", "MoFr12001400",
     "MoFr14001600", "MoFr16001900", "MoFr19002200", "MoFr22000400",
     "SaSu04000700", "SaSu07001000", "SaSu10001400", "SaSu14001900",
     "SaSu19002200", "SaSu22000400"
   )
+  
+  if (is.null(periods)) {
+    time_periods <- default_periods
+  } else {
+    if (!is.character(periods)) {
+      stop("`periods` must be a character vector of period identifiers.", call. = FALSE)
+    }
+    time_periods <- sort(unique(periods))
+    time_periods <- time_periods[!is.na(time_periods)]
+    if (length(time_periods) == 0L) {
+      stop("`periods` must contain at least one valid time period.", call. = FALSE)
+    }
+    unsupported <- setdiff(time_periods, default_periods)
+    if (length(unsupported) > 0L) {
+      stop(
+        sprintf(
+          "Unsupported time periods: %s",
+          paste(unsupported, collapse = ", ")
+        ),
+        call. = FALSE
+      )
+    }
+  }
+  
+  required_columns <- c(paste0("bike_", time_periods), paste0("car_", time_periods))
+  missing_cols <- setdiff(required_columns, names(base_network))
+  if (length(missing_cols) > 0L) {
+    stop(
+      sprintf(
+        "Base network missing required time columns: %s",
+        paste(missing_cols, collapse = ", ")
+      ),
+      call. = FALSE
+    )
+  }
   
   # ------------------------------------------------------------
   # Create a helper function to extract the modal networks
@@ -39,8 +77,7 @@ generate_modal_networks <- function(base_network) {
   
   get_modal_network <- function(mode, period = NULL) {
     
-    #travel times are denoted by columns given by <mode>_<period>
-    mode_period <- if_else(is.null(period),mode,str_c(mode,"_",period))
+    mode_period <- if (is.null(period)) mode else str_c(mode, "_", period)
     
     message("Generating ", mode_period)
     
