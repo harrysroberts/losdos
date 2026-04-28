@@ -80,10 +80,12 @@ osmrn_trip_attributes <- function(
     )
   }
   
-  # ----------------------------
-  # 1) Load OS MRN datasets and process if neccessary
-  # ----------------------------
+  trip_periods <- sort(unique(as.character(trips$period)))
+  trip_periods <- trip_periods[!is.na(trip_periods) & trip_periods != ""]
   
+  # ----------------------------
+  # 1) Load OS MRN datasets and process if necessary
+  # ----------------------------
   if (all(file.exists(
     file.path(
       "input/processed/",
@@ -115,12 +117,15 @@ osmrn_trip_attributes <- function(
   )
   
   # ----------------------------
-  # 3) Generate modal networks for all mode x period combinations
+  # 3) Generate modal networks for the periods present in the trips dataset
   # ----------------------------
   
-  message("Generating modal networks for all mode × period combinations ...")
+  message("Generating modal networks for periods present in trips ...")
  
-  modal_networks <- generate_modal_networks(base_network)
+  modal_networks <- generate_modal_networks(
+    base_network,
+    periods = trip_periods
+  )
   
   # ----------------------------
   # 4) Extract links connecting origins and destinations to/from each network
@@ -157,7 +162,6 @@ osmrn_trip_attributes <- function(
   # ----------------------------
   
   message("Creating dual representations of each network")
-  
   dual_networks <- generate_dual_networks(augmented_networks)
   
   # ----------------------------

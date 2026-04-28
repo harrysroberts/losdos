@@ -25,15 +25,10 @@
 generate_dual_networks <- function(augmented_networks) {
   
   # ------------------------------------------------------------
-  # Define time periods
+  # Define time periods present in the augmented networks
   # ------------------------------------------------------------
   
-  time_periods <- c(
-    "MoFr04000700", "MoFr07000900", "MoFr09001200", "MoFr12001400",
-    "MoFr14001600", "MoFr16001900", "MoFr19002200", "MoFr22000400",
-    "SaSu04000700", "SaSu07001000", "SaSu10001400", "SaSu14001900",
-    "SaSu19002200", "SaSu22000400"
-  )
+  time_periods <- names(augmented_networks$bike)
   
   # ------------------------------------------------------------
   # Import the datasets from OS MRN
