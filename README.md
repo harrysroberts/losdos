@@ -37,14 +37,22 @@ devtools::install_github("harrysroberts/losdos")
 
 ## Usage
 
-### Basic Example
+There are two main functions for computing attributes:
+
+- `osmrn_trip_attributes()` — Compute distance and time by each mode for a set of defined trips with fixed origins, destinations and time periods
+- `osmrn_matrix_attributes()` — Compute walk/bike/car distance and time for all pairs of origins and destinations across specified time periods
+
+
+### Basic Examples
+
+Example of `osmrn_trip_attributes()`:
 
 ```r
 library(losdos)
 
 # Prepare your trips dataset
 trips <- data.frame(
-  trip_id = c(1, 2, 3),
+  id = c(1, 2, 3),
   period = c("MoFr09001200", "MoFr19002200", "SaSu14001900"),
   from_easting = c(429180, 427750, 435741),
   from_northing = c(434731, 435747, 432124),
@@ -52,7 +60,7 @@ trips <- data.frame(
   to_northing = c(433271, 433532, 441858)
 )
 
-# Compute mode and time-specific routing attributes
+# Compute mode and time-specific attributes
 results <- osmrn_trip_attributes(
   trips,
   walk_speed = 4.824,      # km/h (default MatSim value)
@@ -62,18 +70,74 @@ results <- osmrn_trip_attributes(
 # View output
 results
 
-#   trip_id       period ... walk_distance walk_time bike_distance bike_time car_distance car_time
+#        id       period ... walk_distance walk_time bike_distance bike_time car_distance car_time
 # 1       1 MoFr09001200 ...      2143.134  26.32291      2145.671  10.09154     2588.870 10.59448
 # 2       2 MoFr19002200 ...      4226.703  52.46928      4079.125  14.82283     4181.384 10.42310
 # 3       3 SaSu14001900 ...     13172.694 164.69240     13061.157  44.89270    15626.795 28.32776
 ```
+
+Example of `osmrn_matrix_attributes()`:
+
+```r
+library(losdos)
+
+# Prepare your origins dataset
+origins <- data.frame(
+  id = c(1, 2, 3),
+  easting = c(429180, 427750, 435741),
+  northing = c(434731, 435747, 432124)
+)
+
+# Prepare your destinations dataset
+destinations <- data.frame(
+  id = c(1, 2, 3),
+  easting = c(429906, 430454, 430731),
+  northing = c(433271, 433532, 441858)
+)
+
+# Compute mode and time-specific attributes for periods of interest
+results <- osmrn_matrix_attributes(
+  origins,
+  destinations,
+  periods =  c("MoFr09001200", "MoFr19002200", "SaSu14001900"),
+  walk_speed = 4.824,      # km/h (default MatSim value)
+  bike_speed = 21.636      # km/h (default MatSim value)
+)
+
+# View output
+results
+
+#    origin destination       period ... walk_distance walk_time bike_distance bike_time car_distance  car_time
+# 1       1           1 MoFr09001200 ...      2143.134  26.32291      2145.671 10.091541     2588.870 10.594476
+# 2       1           1 MoFr19002200 ...      2143.134  26.32291      2145.671  9.686857     2588.870  8.842980
+# 3       1           1 SaSu14001900 ...      2143.134  26.32291      2148.427  9.844002     2588.870  9.014744
+# 4       1           2 MoFr09001200 ...      2158.624  26.53713      2158.624 11.197209     2551.594  8.479723
+# 5       1           2 MoFr19002200 ...      2158.624  26.53713      2158.624  9.109990     2551.594  6.614542
+# 6       1           2 SaSu14001900 ...      2158.624  26.53713      2158.624  9.572531     2551.594  7.865528 
+# 7       1           3 MoFr09001200 ...      8761.434 110.58688      8664.031 32.905502     9717.246 18.881990
+# 8       1           3 MoFr19002200 ...      8761.434 110.58688      8664.031 31.731030     9717.246 17.302694
+# 9       1           3 SaSu14001900 ...      8761.434 110.58688      8664.031 32.861117     9717.246 18.127696
+# ...
+# 25      3           3 MoFr09001200 ...     13172.694 164.69240     13061.157 45.259649    15626.795 30.226330
+# 26      3           3 MoFr19002200 ...     13172.694 164.69240     13061.157 44.158099    15626.795 26.941794
+# 27      3           3 SaSu14001900 ...     13172.694 164.69240     13061.157 44.892704    15626.795 28.327760
+```
+
 ### Input Requirements
 
 The `trips` data frame must include:
-- `trip_id` — Unique trip identifier
+- `id` — Unique trip identifier
 - `period` — Time period code (one of 14 periods: e.g., "MoFr09001200", "SaSu14001900")
 - `from_easting`, `from_northing` — Origin coordinates (EPSG:27700)
 - `to_easting`, `to_northing` — Destination coordinates (EPSG:27700)
+
+The `origins` data frame must include:
+- `id` — Unique origin identifier
+- `easting`, `northing` — Origin coordinates (EPSG:27700)
+
+The `destinations` data frame must include:
+- `id` — Unique destination identifier
+- `easting`, `northing` — Destination coordinates (EPSG:27700)
 
 ### Available Time Periods
 
@@ -89,7 +153,7 @@ The OSMRN includes speeds for 14 time periods:
 
 ### Output
 
-The function returns the input trips data frame with additional columns:
+The `osmrn_trip_attributes()` function returns the input trips data frame with additional columns:
 
 | Column | Description |
 |--------|-------------|
@@ -99,6 +163,8 @@ The function returns the input trips data frame with additional columns:
 | `bike_time` | Cycling time (minutes) |
 | `car_distance` | Driving distance (metres) |
 | `car_time` | Driving time (minutes) |
+
+The `osmrn_matrix_attributes()` function returns a data frame with one row per origin-destination-period combination, including the same distance and time columns as above.
 
 ### Custom Walk/Bike Speeds
 
@@ -135,6 +201,7 @@ Subsequent calls will reuse the cached data for speed.
 
 ### Main Function
 - **`osmrn_trip_attributes()`** — Compute distance and time by each mode for origin-destination pairs
+- **`osmrn_matrix_attributes()`** — Compute walk/bike/car distance and time for all origin-destination pairs across specified periods
 
 ### Internal Functions
 - `create_base_network()` — Build base network with all time-of-day variations
@@ -143,7 +210,8 @@ Subsequent calls will reuse the cached data for speed.
 - `generate_destination_links()` — Create links connecting trip destinations to the nearest network node
 - `generate_augmented_networks()` — Append origin/destination links to each modal network
 - `generate_dual_networks()` — Convert to dual representation with turn restrictions
-- `compute_attributes()` — Compute distance/time by each mode via dodgr routing
+- `compute_trip_attributes()` — Compute distance/time of each trip by each mode via dodgr routing
+- `compute_matrix_attributes()` — Compute distance/time by each mode for all origin-destination pairs and specified periods via dodgr routing
 
 ## References
 
@@ -162,4 +230,3 @@ MIT License. See LICENSE file for details.
 Harry Roberts ([ts22hr@leeds.ac.uk](mailto:ts22hr@leeds.ac.uk))
 
 Institute for Transport Studies, University of Leeds
-

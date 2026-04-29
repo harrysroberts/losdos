@@ -4,10 +4,10 @@
 \alias{generate_origin_links}
 \title{Generate links connecting origins to the modal networks}
 \usage{
-generate_origin_links(trips, modal_networks, walk_speed)
+generate_origin_links(origins, modal_networks, walk_speed)
 }
 \arguments{
-\item{trips}{A dataset containing the list of trips being evaluated}
+\item{origins}{A dataset containing the list of origin points}
 
 \item{modal_networks}{A named list containing:
 \itemize{
@@ -29,8 +29,7 @@ each time period
 }
 }
 \description{
-This function generates links connecting the origin of each trip in the
-\code{trips} dataset to each modal network corresponding to the time period
-of the trip
+This function generates links connecting the origin in the \code{origins} dataset
+to each modal network corresponding to the time period of the trip
 }
 \keyword{internal}

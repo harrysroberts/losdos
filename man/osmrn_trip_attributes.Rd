@@ -2,13 +2,13 @@
 % Please edit documentation in R/osmrn_trip_attributes.R
 \name{osmrn_trip_attributes}
 \alias{osmrn_trip_attributes}
-\title{Compute OS-MRN trip attributes (walk/bike/car distance & time via dodgr)}
+\title{Compute OSMRN trip attributes (walk/bike/car distance & time) via dodgr}
 \usage{
 osmrn_trip_attributes(trips, walk_speed = 4.824, bike_speed = 21.636)
 }
 \arguments{
 \item{trips}{A \code{data.frame}/\code{tibble} with required columns:
-\code{trip_id}, \code{period},
+\code{id}, \code{period},
 \code{from_easting}, \code{from_northing},
 \code{to_easting},  \code{to_northing}.
 CRS for coordinates must be \strong{EPSG:27700} (metres).}
@@ -35,9 +35,9 @@ graph is weighted by time for routing; distance is summed along the same path).
 }
 \examples{
 \dontrun{
- # Requires OS MRN data files in input/raw/ directory
+ # Requires OSMRN data files in input/raw/ directory
  trips <- data.frame(
-   trip_id = c(1, 2),
+   id = c(1, 2),
    period = c("MoFr09001200", "MoFr09001200"),
    from_easting = c(432500, 432600),
    from_northing = c(434200, 434300),

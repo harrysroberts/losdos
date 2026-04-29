@@ -4,10 +4,10 @@
 \alias{generate_destination_links}
 \title{Generate links connecting the modal networks to destinations}
 \usage{
-generate_destination_links(trips, modal_networks, walk_speed)
+generate_destination_links(destinations, modal_networks, walk_speed)
 }
 \arguments{
-\item{trips}{A dataset containing the list of trips being evaluated}
+\item{destinations}{A dataset containing the list of destination points}
 
 \item{modal_networks}{A named list containing:
 \itemize{
@@ -29,8 +29,8 @@ for each time period
 }
 }
 \description{
-This function generates links connecting into the destination of each trip
-in the\code{trips} dataset from each modal network corresponding to the time
+This function generates links connecting into the destinations in the
+\code{destinations} dataset from each modal network corresponding to the time
 period of the trip
 }
 \keyword{internal}
