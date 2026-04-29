@@ -4,10 +4,14 @@
 \alias{generate_modal_networks}
 \title{Generate modal networks for walk, bike, and car}
 \usage{
-generate_modal_networks(base_network)
+generate_modal_networks(base_network, periods = NULL)
 }
 \arguments{
 \item{base_network}{The full network edge table containing travel times.}
+
+\item{periods}{Optional character vector of periods to generate modal networks for.
+Defaults to all supported time periods. Only periods present in the trips
+dataset should be requested.}
 }
 \value{
 A named list containing:

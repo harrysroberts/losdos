@@ -36,15 +36,15 @@
 #'  # Requires OS MRN data files in input/raw/ directory
 #'
 #'  origins <- data.frame(
-#'    id = c("O1", "O2"),
-#'    easting = c(432500, 432600),
-#'    northing = c(434200, 434300)
+#'    id = c(1, 2, 3),
+#'    easting = c(429180, 427750, 435741),
+#'    northing = c(434731, 435747, 432124)
 #'  )
 #'
 #'  destinations <- data.frame(
-#'    id = c("D1", "D2"),
-#'    easting = c(432700, 432800),
-#'    northing = c(434400, 434500)
+#'    id = c(1, 2, 3),
+#'    easting = c(429906, 430454, 430731),
+#'    northing = c(433271, 433532, 441858)
 #'  )
 #'
 #'  results <- osmrn_matrix_attributes(
@@ -105,7 +105,7 @@ osmrn_matrix_attributes <- function(
       call. = FALSE
     )
   }
-
+  
   # ----------------------------
   # 1) Load OS MRN datasets and process if necessary
   # ----------------------------
@@ -113,15 +113,15 @@ osmrn_matrix_attributes <- function(
     file.path(
       "input/processed/",
       c("links.gpkg","nodes.gpkg","turn_restrictions.gpkg")
-      )
-    ))) {
+    )
+  ))) {
     message("Using cached OSMRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
   } else if (all(file.exists(
     file.path(
       "input/raw/",
       c("boundary.gpkg","osmrn.gpkg")
-      )
-    ))) {
+    )
+  ))) {
     message("Processing OS MRN network...")
     dir.create("input/processed", recursive = TRUE)
     process_osmrn()
@@ -144,7 +144,7 @@ osmrn_matrix_attributes <- function(
   # ----------------------------
   
   message("Generating modal networks for periods present in trips ...")
- 
+  
   modal_networks <- generate_modal_networks(
     base_network,
     periods = periods
@@ -160,7 +160,7 @@ osmrn_matrix_attributes <- function(
     cross_join(
       origins,
       data.frame(period = periods)
-      ),
+    ),
     modal_networks,
     walk_speed
   )
@@ -169,7 +169,7 @@ osmrn_matrix_attributes <- function(
     cross_join(
       destinations,
       data.frame(period = periods)
-      ),
+    ),
     modal_networks,
     walk_speed
   )
@@ -213,17 +213,17 @@ osmrn_matrix_attributes <- function(
   
   origins %>%
     cross_join(destinations) %>%
-    rename(
-      origin = id.x,
-      destination = id.y,
+    mutate(
+      origin = as.character(id.x),
+      destination = as.character(id.y),
       origin_easting = easting.x,
       origin_northing = northing.x,
       destination_easting = easting.y,
       destination_northing = northing.y
-      ) %>%
+    ) %>%
     cross_join(
       data.frame(period = periods)
-      ) %>%
+    ) %>%
     select(
       origin,
       destination,
@@ -232,11 +232,11 @@ osmrn_matrix_attributes <- function(
       origin_northing,
       destination_easting,
       destination_northing
-      ) %>%
+    ) %>%
     left_join(
       results,
       by = join_by(origin, destination, period)
     )
-    
-
+  
+  
 }
