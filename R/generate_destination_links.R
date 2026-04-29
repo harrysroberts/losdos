@@ -33,13 +33,14 @@ generate_destination_links <- function(destinations,modal_networks,walk_speed) {
   time_periods <- names(modal_networks$bike)
   
   # ------------------------------------------------------------
-  # Get links connecting origins to the nearest network node
+  # Get links connecting destinations to the nearest network node
   # ------------------------------------------------------------
   
   get_destination_links <- function(network, p = NA) {
     
     destinations %>%
       filter(is.na(p)|period == p) %>%
+      distinct(id, .keep_all = TRUE) %>%
       rowwise() %>%
       mutate(
         nearest_endnode_row = {
@@ -50,7 +51,6 @@ generate_destination_links <- function(destinations,modal_networks,walk_speed) {
       ) %>%
       ungroup() %>%
       mutate(
-        trip_id = id,
         from_node = network$to_node[nearest_endnode_row],
         to_node = str_c("destination",id),
         from_easting = network$to_easting[nearest_endnode_row],
@@ -58,12 +58,12 @@ generate_destination_links <- function(destinations,modal_networks,walk_speed) {
         to_easting = easting,
         to_northing = northing,
         distance = sqrt(
-          (network$to_easting[nearest_endnode_row]-toeasting)^2 +
+          (network$to_easting[nearest_endnode_row]-to_easting)^2 +
             (network$to_northing[nearest_endnode_row]-to_northing)^2
         ),
         time = distance / (walk_speed*1000/60),
       ) %>%
-      select(trip_id,from_node,to_node,distance,time,from_easting,from_northing,to_easting,to_northing)
+      select(id,from_node,to_node,distance,time,from_easting,from_northing,to_easting,to_northing)
   }
   
   

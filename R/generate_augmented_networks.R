@@ -46,22 +46,22 @@ generate_augmented_networks <- function(modal_networks,origins,destinations) {
   list(
     
     walk = modal_networks$walk %>% 
-      bind_rows(select(origins$walk,!trip_id)) %>% 
-      bind_rows(select(destinations$walk,!trip_id)),
+      bind_rows(select(origins$walk,!id)) %>% 
+      bind_rows(select(destinations$walk,!id)),
     
     bike = map(
       time_periods, 
       ~ modal_networks$bike[[.x]] %>%
-        bind_rows(select(origins$bike[[.x]],!trip_id)) %>%
-        bind_rows(select(destinations$bike[[.x]],!trip_id))
+        bind_rows(select(origins$bike[[.x]],!id)) %>%
+        bind_rows(select(destinations$bike[[.x]],!id))
       ) %>% 
       set_names(time_periods),
     
     car = map(
       time_periods, 
       ~ modal_networks$car[[.x]] %>%
-        bind_rows(select(origins$car[[.x]],!trip_id)) %>%
-        bind_rows(select(destinations$car[[.x]],!trip_id))
+        bind_rows(select(origins$car[[.x]],!id)) %>%
+        bind_rows(select(destinations$car[[.x]],!id))
       ) %>% 
       set_names(time_periods)
     

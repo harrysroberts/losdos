@@ -22,7 +22,7 @@
 #'   - bike: a list of dual bike networks for each time period
 #'   - car:  a list of dual car networks for each time period
 #'
-#' @return A data frame containing comprising the `trip_id` together with
+#' @return A data frame containing comprising the `id` together with
 #' the computed distance and time of each mode as a separate column
 #'
 #' @keywords internal
@@ -48,12 +48,12 @@ compute_trip_attributes <- function(origins,destinations,dual_networks) {
     #Build O-D pairs with link keys
     ods <- o %>%
       mutate(from_link = str_c(from_node, ">", to_node)) %>%
-      select(trip_id, from_link) %>%
+      select(id, from_link) %>%
       left_join(
         d %>%
           mutate(to_link = str_c(from_node, ">", to_node)) %>%
-          select(trip_id, to_link),
-        by = join_by(trip_id)
+          select(id, to_link),
+        by = join_by(id)
         )
     
     distances <- network %>%
@@ -69,10 +69,10 @@ compute_trip_attributes <- function(origins,destinations,dual_networks) {
         pairwise = TRUE
         ) %>%
       
-      #vector results, need to bind to the trip_id and name the value
-      bind_cols(select(ods,trip_id)) %>%
+      #vector results, need to bind to the trip id and name the value
+      bind_cols(select(ods,id)) %>%
       rename(distance = ...1) %>%
-      select(trip_id,distance)
+      select(id,distance)
     
     times <- network %>%
       
@@ -87,13 +87,13 @@ compute_trip_attributes <- function(origins,destinations,dual_networks) {
         pairwise = TRUE
       ) %>%
       
-      #vector results, need to bind to the trip_id and name the value
-      bind_cols(select(ods,trip_id)) %>%
+      #vector results, need to bind to the trip id and name the value
+      bind_cols(select(ods,id)) %>%
       rename(time = ...1) %>%
-      select(trip_id,time)
+      select(id,time)
     
     #return data frame with distance and time of each trip
-    left_join(distances,times, by = join_by("trip_id"))
+    left_join(distances,times, by = join_by("id"))
 
   }
   
@@ -150,7 +150,7 @@ compute_trip_attributes <- function(origins,destinations,dual_networks) {
     select(!period)
   
   walk_results %>%
-    left_join(bike_results, by = join_by(trip_id)) %>%
-    left_join(car_results, by = join_by(trip_id))
+    left_join(bike_results, by = join_by(id)) %>%
+    left_join(car_results, by = join_by(id))
   
 }

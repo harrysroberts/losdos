@@ -44,7 +44,7 @@ library(losdos)
 
 # Prepare your trips dataset
 trips <- data.frame(
-  trip_id = c(1, 2, 3),
+  id = c(1, 2, 3),
   period = c("MoFr09001200", "MoFr19002200", "SaSu14001900"),
   from_easting = c(429180, 427750, 435741),
   from_northing = c(434731, 435747, 432124),
@@ -62,7 +62,7 @@ results <- osmrn_trip_attributes(
 # View output
 results
 
-#   trip_id       period ... walk_distance walk_time bike_distance bike_time car_distance car_time
+#        id       period ... walk_distance walk_time bike_distance bike_time car_distance car_time
 # 1       1 MoFr09001200 ...      2143.134  26.32291      2145.671  10.09154     2588.870 10.59448
 # 2       2 MoFr19002200 ...      4226.703  52.46928      4079.125  14.82283     4181.384 10.42310
 # 3       3 SaSu14001900 ...     13172.694 164.69240     13061.157  44.89270    15626.795 28.32776
@@ -70,7 +70,7 @@ results
 ### Input Requirements
 
 The `trips` data frame must include:
-- `trip_id` — Unique trip identifier
+- `id` — Unique trip identifier
 - `period` — Time period code (one of 14 periods: e.g., "MoFr09001200", "SaSu14001900")
 - `from_easting`, `from_northing` — Origin coordinates (EPSG:27700)
 - `to_easting`, `to_northing` — Destination coordinates (EPSG:27700)

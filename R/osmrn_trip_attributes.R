@@ -1,4 +1,4 @@
-#' Compute OS-MRN trip attributes (walk/bike/car distance & time via dodgr)
+#' Compute OSMRN trip attributes (walk/bike/car distance & time) via dodgr
 #'
 #' @description
 #' **OS-specific wrapper** that builds mode × period networks (including 
@@ -11,7 +11,7 @@
 #' graph is weighted by time for routing; distance is summed along the same path).
 #'
 #' @param trips A `data.frame`/`tibble` with required columns:
-#'   `trip_id`, `period`,
+#'   `id`, `period`,
 #'   `from_easting`, `from_northing`,
 #'   `to_easting`,  `to_northing`.
 #'   CRS for coordinates must be **EPSG:27700** (metres).
@@ -27,9 +27,9 @@
 #'
 #' @examples
 #' \dontrun{
-#'  # Requires OS MRN data files in input/raw/ directory
+#'  # Requires OSMRN data files in input/raw/ directory
 #'  trips <- data.frame(
-#'    trip_id = c(1, 2),
+#'    id = c(1, 2),
 #'    period = c("MoFr09001200", "MoFr09001200"),
 #'    from_easting = c(432500, 432600),
 #'    from_northing = c(434200, 434300),
@@ -64,7 +64,7 @@ osmrn_trip_attributes <- function(
   }
   
   required_cols <- c(
-    "trip_id", "period",
+    "id", "period",
     "from_easting", "from_northing",
     "to_easting",  "to_northing"
   )
@@ -92,7 +92,7 @@ osmrn_trip_attributes <- function(
       c("links.gpkg","nodes.gpkg","turn_restrictions.gpkg")
       )
     ))) {
-    message("Using previously processed OS MRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
+    message("Using cached OSMRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
   } else if (all(file.exists(
     file.path(
       "input/raw/",
@@ -134,29 +134,27 @@ osmrn_trip_attributes <- function(
   message("Extracting links connecting origins and destinations to each network")
   
   origins <- trips %>%
-    select(trip_id, period, from_easting, from_northing) %>%
+    select(id, period, from_easting, from_northing) %>%
     rename(
-      id = trip_id,
       easting = from_easting,
       northing = from_northing
     )
 
   origin_links <- generate_origin_links(
-    trips,
+    origins,
     modal_networks,
     walk_speed
   )
 
   destinations <- trips %>%
-    select(trip_id, period, to_easting, to_northing) %>%
+    select(id, period, to_easting, to_northing) %>%
     rename(
-      id = trip_id,
       easting = to_easting,
       northing = to_northing
     )
   
   destination_links <- generate_destination_links(
-    trips,
+    destinations,
     modal_networks,
     walk_speed
   )
@@ -201,7 +199,7 @@ osmrn_trip_attributes <- function(
   left_join(
     trips,
     results,
-    by = join_by(trip_id)
+    by = join_by(id)
   )
   
 }

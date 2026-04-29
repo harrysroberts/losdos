@@ -39,6 +39,7 @@ generate_origin_links <- function(origins,modal_networks,walk_speed) {
     
     origins %>%
       filter(is.na(p)|period == p) %>%
+      distinct(id, .keep_all = TRUE) %>%
       rowwise() %>%
       mutate(
         nearest_startnode_row = {
@@ -49,7 +50,6 @@ generate_origin_links <- function(origins,modal_networks,walk_speed) {
       ) %>%
       ungroup() %>%
       mutate(
-        trip_id = id,
         from_node = str_c("origin",id),
         to_node = network$from_node[nearest_startnode_row],
         from_easting = easting,
@@ -62,7 +62,7 @@ generate_origin_links <- function(origins,modal_networks,walk_speed) {
         ),
         time = distance / (walk_speed*1000/60),
       ) %>%
-      select(trip_id,from_node,to_node,distance,time,from_easting,from_northing,to_easting,to_northing)
+      select(id,from_node,to_node,distance,time,from_easting,from_northing,to_easting,to_northing)
   }
   
   

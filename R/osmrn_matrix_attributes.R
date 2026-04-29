@@ -1,4 +1,4 @@
-#' Compute OS-MRN matrix of attributes (walk/bike/car distance & time via dodgr)
+#' Compute OSMRN matrix of attributes (walk/bike/car distance & time) via dodgr
 #'
 #' @description
 #' **OS-specific wrapper** that builds mode × period networks (including 
@@ -20,7 +20,7 @@
 #'   CRS for coordinates must be **EPSG:27700** (metres).
 
 #' @param periods Optional character vector of time period identifiers. Defaults 
-#' to all supported OS-MRN periods.
+#' to all supported OSMRN periods.
 #'   
 #' @param walk_speed Numeric. Assumed walk speed in kilometres per hour. 
 #'    Defaults to 4.824 km/h as used by MatSim.
@@ -58,7 +58,7 @@
 #' @import dplyr
 #'
 #' @export
-osmrn_trip_attributes <- function(
+osmrn_matrix_attributes <- function(
     origins,
     destinations,
     periods = c(
@@ -115,7 +115,7 @@ osmrn_trip_attributes <- function(
       c("links.gpkg","nodes.gpkg","turn_restrictions.gpkg")
       )
     ))) {
-    message("Using previously processed OS MRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
+    message("Using cached OSMRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
   } else if (all(file.exists(
     file.path(
       "input/raw/",
@@ -194,7 +194,7 @@ osmrn_trip_attributes <- function(
   dual_networks <- generate_dual_networks(augmented_networks)
   
   # ----------------------------
-  # 7) Compute distance and time by each mode for each trip
+  # 7) Compute distance and time matrices for each mode and time period
   # ----------------------------
   
   message("Computing distance and time for each mode")
@@ -211,6 +211,32 @@ osmrn_trip_attributes <- function(
   
   message("Preparing output...")
   
-  results
+  origins %>%
+    cross_join(destinations) %>%
+    rename(
+      origin = id.x,
+      destination = id.y,
+      origin_easting = easting.x,
+      origin_northing = northing.x,
+      destination_easting = easting.y,
+      destination_northing = northing.y
+      ) %>%
+    cross_join(
+      data.frame(period = periods)
+      ) %>%
+    select(
+      origin,
+      destination,
+      period,
+      origin_easting,
+      origin_northing,
+      destination_easting,
+      destination_northing
+      ) %>%
+    left_join(
+      results,
+      by = join_by(origin, destination, period)
+    )
+    
 
 }

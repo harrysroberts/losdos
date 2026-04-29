@@ -48,11 +48,11 @@ compute_matrix_attributes <- function(origins,destinations,dual_networks) {
     #Build O-D pairs with link keys
     o <- o %>%
       mutate(from_link = str_c(from_node, ">", to_node)) %>%
-      select(trip_id, from_link)
+      select(id, from_link)
 
     d <- d %>%
       mutate(to_link = str_c(from_node, ">", to_node)) %>%
-      select(trip_id, to_link)
+      select(id, to_link)
 
     distances <- network %>%
       
@@ -69,7 +69,13 @@ compute_matrix_attributes <- function(origins,destinations,dual_networks) {
       
       #matrix results, need to convert back to edge list format
         as_tibble(rownames = "origin") %>%
-        pivot_longer(-origin, names_to = "destination", values_to = "distance")
+        pivot_longer(-origin, names_to = "destination", values_to = "distance") %>%
+      
+      #extract the original origin and destination IDs from the link keys
+      mutate(
+        origin = str_extract(origin, "(?<=origin)[^>]+"),
+        destination = str_extract(destination, "(?<=destination)[^>]+")
+      )
     
     times <- network %>%
       
@@ -86,7 +92,13 @@ compute_matrix_attributes <- function(origins,destinations,dual_networks) {
       
       #matrix results, need to convert back to edge list format
       as_tibble(rownames = "origin") %>%
-      pivot_longer(-origin, names_to = "destination", values_to = "time")
+      pivot_longer(-origin, names_to = "destination", values_to = "time") %>%
+      
+      #extract the original origin and destination IDs from the link keys
+      mutate(
+        origin = str_extract(origin, "(?<=origin)[^>]+"),
+        destination = str_extract(destination, "(?<=destination)[^>]+")
+      )
 
     #return data frame with distance and time of each trip
     left_join(distances,times, by = join_by("origin","destination"))
@@ -145,7 +157,7 @@ compute_matrix_attributes <- function(origins,destinations,dual_networks) {
       car_distance = distance,
       car_time = time
     )
-  
+    
   walk_results %>%
     left_join(bike_results, by = join_by("origin","destination","period")) %>%
     left_join(car_results, by = join_by("origin","destination","period"))
