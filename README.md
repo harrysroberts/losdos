@@ -135,6 +135,7 @@ Subsequent calls will reuse the cached data for speed.
 
 ### Main Function
 - **`osmrn_trip_attributes()`** — Compute distance and time by each mode for origin-destination pairs
+- **`osmrn_matrix_attributes()`** — Compute walk/bike/car distance and time for all origin-destination pairs across specified periods
 
 ### Internal Functions
 - `create_base_network()` — Build base network with all time-of-day variations
@@ -143,7 +144,7 @@ Subsequent calls will reuse the cached data for speed.
 - `generate_destination_links()` — Create links connecting trip destinations to the nearest network node
 - `generate_augmented_networks()` — Append origin/destination links to each modal network
 - `generate_dual_networks()` — Convert to dual representation with turn restrictions
-- `compute_attributes()` — Compute distance/time by each mode via dodgr routing
+- `compute_trip_attributes()` — Compute distance/time by each mode via dodgr routing
 
 ## References
 

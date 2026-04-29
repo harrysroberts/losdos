@@ -1,10 +1,9 @@
 #' Generate links connecting origins to the modal networks
 #'
-#' This function generates links connecting the origin of each trip in the
-#' `trips` dataset to each modal network corresponding to the time period
-#' of the trip
+#' This function generates links connecting the origin in the `origins` dataset 
+#' to each modal network corresponding to the time period of the trip
 #'
-#' @param trips A dataset containing the list of trips being evaluated
+#' @param origins A dataset containing the list of origin points
 #' @param modal_networks A named list containing:
 #'   - walk: a single modal network
 #'   - bike: a list of bike networks for each time period
@@ -24,7 +23,7 @@
 #' @import dplyr
 #' @import purrr
 #' @import stringr
-generate_origin_links <- function(trips,modal_networks,walk_speed) {
+generate_origin_links <- function(origins,modal_networks,walk_speed) {
   
   # ------------------------------------------------------------
   # Define time periods present in the modal networks
@@ -38,20 +37,23 @@ generate_origin_links <- function(trips,modal_networks,walk_speed) {
   
   get_origin_links <- function(network, p = NA) {
     
-    trips %>%
+    origins %>%
       filter(is.na(p)|period == p) %>%
       rowwise() %>%
       mutate(
         nearest_startnode_row = {
-          distsquared <- (network$from_easting-from_easting)^2 + 
-            (network$from_northing-from_northing)^2
+          distsquared <- (network$from_easting-easting)^2 + 
+            (network$from_northing-northing)^2
           which.min(distsquared)
         } 
       ) %>%
       ungroup() %>%
       mutate(
-        from_node = str_c("origin",trip_id),
+        trip_id = id,
+        from_node = str_c("origin",id),
         to_node = network$from_node[nearest_startnode_row],
+        from_easting = easting,
+        from_northing = northing,
         to_easting = network$from_easting[nearest_startnode_row],
         to_northing = network$from_northing[nearest_startnode_row],
         distance = sqrt(

@@ -31,7 +31,7 @@
 #' @import purrr
 #' @import stringr
 #' @import dodgr
-compute_attributes <- function(origins,destinations,dual_networks) {
+compute_trip_attributes <- function(origins,destinations,dual_networks) {
   
   # ------------------------------------------------------------
   # Define time periods present in the dual networks
@@ -43,7 +43,7 @@ compute_attributes <- function(origins,destinations,dual_networks) {
   # Get distance and time attributes for trips in each mode/time period
   # ------------------------------------------------------------
   
-  get_attributes <- function(o,d,network){
+  get_trip_attributes <- function(o,d,network){
     
     #Build O-D pairs with link keys
     ods <- o %>%
@@ -103,7 +103,7 @@ compute_attributes <- function(origins,destinations,dual_networks) {
   
   message("Computing walk attributes...")
   
-  walk_results <- get_attributes(
+  walk_results <- get_trip_attributes(
       origins$walk,
       destinations$walk,
       dual_networks$walk
@@ -117,7 +117,7 @@ compute_attributes <- function(origins,destinations,dual_networks) {
   
   bike_results <- map(
       time_periods,
-      ~ get_attributes(
+      ~ get_trip_attributes(
         origins$bike[[.x]],
         destinations$bike[[.x]],
         dual_networks$bike[[.x]]
@@ -135,7 +135,7 @@ compute_attributes <- function(origins,destinations,dual_networks) {
     
   car_results <- map(
     time_periods,
-    ~ get_attributes(
+    ~ get_trip_attributes(
       origins$car[[.x]],
       destinations$car[[.x]],
       dual_networks$car[[.x]]
