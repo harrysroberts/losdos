@@ -63,6 +63,7 @@
 #' }
 #'
 #' @import dplyr
+#' @import sf
 #'
 #' @export
 osmrn_matrix_attributes <- function(
@@ -142,23 +143,34 @@ osmrn_matrix_attributes <- function(
   nodes <- st_read("input/processed/nodes.gpkg", quiet = TRUE)
   turn_restrictions <- st_read("input/processed/turn_restrictions.gpkg", quiet = TRUE)
   
- # ----------------------------
+  # ----------------------------
   # 2) Create or retrieve modal networks
   # ----------------------------
-
+  
+  modal_networks = NULL
+  
   if (use_cache && all(file.exists(
     file.path(
       "input/processed/",
       c("modal_networks.rds")
-      )
-    ))) {
-
-    message("Using cached modal networks. \nTo update the networks, please remove the 'modal_networks.rds' file from the input/processed/ directory.")
+    )
+  ))) {
+    
+    message("Using cached modal networks. \nTo generate new networks, please set `use_cache = FALSE` and or remove the 'modal_networks.rds' file from the input/processed/ directory.")
     
     modal_networks <- readRDS("input/processed/modal_networks.rds")
+    
+    #condition to check if cached networks cover all specified periods - if not, discard cache and regenerate
+    
+    if(!all(periods %in% names(modal_networks$bike))){
+      message("Cached networks do not cover all specified time periods, reverting to network generation")
+      modal_networks = NULL
+    }
+    
+  } 
   
-  } else {
-
+  if (is.null(modal_networks)) {
+    
     message("Creating base network...")
     base_network <- create_base_network(
       walk_speed = walk_speed,
@@ -225,7 +237,7 @@ osmrn_matrix_attributes <- function(
     links,
     nodes,
     turn_restrictions
-    )
+  )
   
   # ----------------------------
   # 6) Compute distance and time matrices for each mode and time period

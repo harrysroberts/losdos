@@ -28,6 +28,7 @@
 #' @keywords internal
 #'
 #' @import dplyr
+#' @import tidyr
 #' @import purrr
 #' @import stringr
 #' @import dodgr

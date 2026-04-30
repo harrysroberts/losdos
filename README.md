@@ -187,9 +187,11 @@ The first call to `osmrn_trip_attributes()` will automatically:
 1. Process the raw OSMRN files
 2. Filter to your study area boundary
 3. Compute walk, bike and car distance and time attributes for each trip
-5. Cache the processed networks in `input/processed/`
+5. Save the processed networks in `input/processed/`
 
-Subsequent calls will reuse the cached data for speed.
+Subsequent calls will reuse the pre-processed data for speed.
+
+Both functions also allow for caching and retrieving modal networks from `input/processed/` to speed up repeated analyses. The logical argument `make_cache = TRUE` will save the processed networks for future use, while `use_cache = TRUE` (default setting) will load from cache if available.
 
 ## Package Functions
 

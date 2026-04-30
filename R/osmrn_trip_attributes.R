@@ -31,10 +31,6 @@
 #'
 #' @return The `trips` database with additional columns for computed distance
 #' and time by each of walk, bike and car modes
-
-
-
-
 #'
 #' @examples
 #' \dontrun{
@@ -60,7 +56,7 @@ osmrn_trip_attributes <- function(
     walk_speed = 4.824,
     bike_speed = 21.636,
     make_cache = FALSE,
-    use_cache = TRUE,
+    use_cache = TRUE
 ) {
   # ----------------------------
   # 0) Basic validation
@@ -124,19 +120,28 @@ osmrn_trip_attributes <- function(
   # 2) Create or retrieve modal networks
   # ----------------------------
 
+  modal_networks = NULL
+  
   if (use_cache && all(file.exists(
     file.path(
       "input/processed/",
       c("modal_networks.rds")
-      )
-    ))) {
-
-    message("Using cached modal networks. \nTo update the networks, please remove the 'modal_networks.rds' file from the input/processed/ directory.")
+    )
+  ))) {
+    
+    message("Using cached modal networks. \nTo generate new networks, please set `use_cache = FALSE` and or remove the 'modal_networks.rds' file from the input/processed/ directory.")
     
     modal_networks <- readRDS("input/processed/modal_networks.rds")
+    
+    if(!all(trip_periods %in% names(modal_networks$bike))){
+      message("Cached networks do not cover all specified time periods, reverting to network generation")
+      modal_networks = NULL
+    }
+    
+  } 
   
-  } else {
-
+  if (is.null(modal_networks)) {
+    
     message("Creating base network...")
     base_network <- create_base_network(
       walk_speed = walk_speed,
@@ -145,7 +150,7 @@ osmrn_trip_attributes <- function(
       nodes = nodes
     )
     
-    message("Generating modal networks for periods present in trips ...")
+    message("Generating modal networks for specified periods ...")
     
     modal_networks <- generate_modal_networks(
       base_network,

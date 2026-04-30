@@ -11,7 +11,9 @@ osmrn_matrix_attributes(
     "MoFr14001600", "MoFr16001900", "MoFr19002200", "MoFr22000400", "SaSu04000700",
     "SaSu07001000", "SaSu10001400", "SaSu14001900", "SaSu19002200", "SaSu22000400"),
   walk_speed = 4.824,
-  bike_speed = 21.636
+  bike_speed = 21.636,
+  make_cache = FALSE,
+  use_cache = TRUE
 )
 }
 \arguments{
@@ -31,6 +33,13 @@ Defaults to 4.824 km/h as used by MatSim.}
 
 \item{bike_speed}{Numeric. Assumed bike speed in kilometres per hour.
 Defaults to 21.636 km/h as used by MatSim.}
+
+\item{make_cache}{Logical. If \code{TRUE}, the generated modal networks
+will be saved to disk as an RDS file for future reuse. Defaults to \code{FALSE}.}
+
+\item{use_cache}{Logical. If \code{TRUE}, the function will attempt to
+load pre-generated modal networks from disk (if they exist) instead of
+regenerating them. Defaults to \code{TRUE}.}
 }
 \value{
 A list of origin-destination pairs with additional columns for
