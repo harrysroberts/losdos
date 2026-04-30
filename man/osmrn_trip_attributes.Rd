@@ -4,7 +4,13 @@
 \alias{osmrn_trip_attributes}
 \title{Compute OSMRN trip attributes (walk/bike/car distance & time) via dodgr}
 \usage{
-osmrn_trip_attributes(trips, walk_speed = 4.824, bike_speed = 21.636)
+osmrn_trip_attributes(
+  trips,
+  walk_speed = 4.824,
+  bike_speed = 21.636,
+  make_cache = FALSE,
+  use_cache = TRUE
+)
 }
 \arguments{
 \item{trips}{A \code{data.frame}/\code{tibble} with required columns:
@@ -18,6 +24,13 @@ Defaults to 4.824 km/h as used by MatSim.}
 
 \item{bike_speed}{Numeric. Assumed bike speed in kilometres per hour.
 Defaults to 21.636 km/h as used by MatSim.}
+
+\item{make_cache}{Logical. If \code{TRUE}, the generated modal networks
+will be saved to disk as an RDS file for future reuse. Defaults to \code{FALSE}.}
+
+\item{use_cache}{Logical. If \code{TRUE}, the function will attempt to
+load pre-generated modal networks from disk (if they exist) instead of
+regenerating them. Defaults to \code{TRUE}.}
 }
 \value{
 The \code{trips} database with additional columns for computed distance

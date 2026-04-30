@@ -28,6 +28,13 @@
 #' @param bike_speed Numeric. Assumed bike speed in kilometres per hour. 
 #'    Defaults to 21.636 km/h as used by MatSim.
 #'
+#' @param make_cache Logical. If `TRUE`, the generated modal networks 
+#' will be saved to disk as an RDS file for future reuse. Defaults to `FALSE`.
+#'
+#' @param use_cache Logical. If `TRUE`, the function will attempt to 
+#' load pre-generated modal networks from disk (if they exist) instead of 
+#' regenerating them. Defaults to `TRUE`.
+#'
 #' @return A list of origin-destination pairs with additional columns for 
 #' computed distance and time by each of walk, bike and car modes
 #'
@@ -56,6 +63,7 @@
 #' }
 #'
 #' @import dplyr
+#' @import sf
 #'
 #' @export
 osmrn_matrix_attributes <- function(
@@ -67,7 +75,9 @@ osmrn_matrix_attributes <- function(
       "SaSu04000700", "SaSu07001000", "SaSu10001400", "SaSu14001900",
       "SaSu19002200", "SaSu22000400"),
     walk_speed = 4.824,
-    bike_speed = 21.636
+    bike_speed = 21.636,
+    make_cache = FALSE,
+    use_cache = TRUE
 ) {
   # ----------------------------
   # 0) Basic validation
@@ -115,7 +125,7 @@ osmrn_matrix_attributes <- function(
       c("links.gpkg","nodes.gpkg","turn_restrictions.gpkg")
     )
   ))) {
-    message("Using cached OSMRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
+    message("Using pre-processed OSMRN network. \nTo update the network, please remove the 'links', 'nodes' and 'turn_restrictions' GeoPackage files from the input/processed/ directory.")
   } else if (all(file.exists(
     file.path(
       "input/raw/",
@@ -134,30 +144,55 @@ osmrn_matrix_attributes <- function(
   turn_restrictions <- st_read("input/processed/turn_restrictions.gpkg", quiet = TRUE)
   
   # ----------------------------
-  # 2) Create base network
+  # 2) Create or retrieve modal networks
   # ----------------------------
   
-  message("Creating base network...")
-  base_network <- create_base_network(
-    walk_speed = walk_speed,
-    bike_speed = bike_speed,
-    links = links,
-    nodes = nodes
-  )
+  modal_networks = NULL
+  
+  if (use_cache && all(file.exists(
+    file.path(
+      "input/processed/",
+      c("modal_networks.rds")
+    )
+  ))) {
+    
+    message("Using cached modal networks. \nTo generate new networks, please set `use_cache = FALSE` and or remove the 'modal_networks.rds' file from the input/processed/ directory.")
+    
+    modal_networks <- readRDS("input/processed/modal_networks.rds")
+    
+    #condition to check if cached networks cover all specified periods - if not, discard cache and regenerate
+    
+    if(!all(periods %in% names(modal_networks$bike))){
+      message("Cached networks do not cover all specified time periods, reverting to network generation")
+      modal_networks = NULL
+    }
+    
+  } 
+  
+  if (is.null(modal_networks)) {
+    
+    message("Creating base network...")
+    base_network <- create_base_network(
+      walk_speed = walk_speed,
+      bike_speed = bike_speed,
+      links = links,
+      nodes = nodes
+    )
+    
+    message("Generating modal networks for specified periods ...")
+    
+    modal_networks <- generate_modal_networks(
+      base_network,
+      periods = periods
+    )
+    
+    if (make_cache) {
+      saveRDS(modal_networks, "input/processed/modal_networks.rds")
+    }
+  }
   
   # ----------------------------
-  # 3) Generate modal networks for the periods present in the trips dataset
-  # ----------------------------
-  
-  message("Generating modal networks for periods present in trips ...")
-  
-  modal_networks <- generate_modal_networks(
-    base_network,
-    periods = periods
-  )
-  
-  # ----------------------------
-  # 4) Extract links connecting origins and destinations to/from each network
+  # 3) Extract links connecting origins and destinations to/from each network
   # ----------------------------
   
   message("Extracting links connecting origins and destinations to each network")
@@ -181,7 +216,7 @@ osmrn_matrix_attributes <- function(
   )
   
   # ----------------------------
-  # 5) Augmenting networks with origin and destination links
+  # 4) Augmenting networks with origin and destination links
   # ----------------------------
   
   message("Appending origin and destination links to each network")
@@ -193,7 +228,7 @@ osmrn_matrix_attributes <- function(
   )
   
   # ----------------------------
-  # 6) Dual the network such that links become nodes and remove restricted turns
+  # 5) Dual the network such that links become nodes and remove restricted turns
   # ----------------------------
   
   message("Creating dual representations of each network")
@@ -202,10 +237,10 @@ osmrn_matrix_attributes <- function(
     links,
     nodes,
     turn_restrictions
-    )
+  )
   
   # ----------------------------
-  # 7) Compute distance and time matrices for each mode and time period
+  # 6) Compute distance and time matrices for each mode and time period
   # ----------------------------
   
   message("Computing distance and time for each mode")
@@ -217,7 +252,7 @@ osmrn_matrix_attributes <- function(
   )
   
   # ----------------------------
-  # 8) Return the results joined to the trip database
+  # 7) Return the results joined to the trip database
   # ----------------------------
   
   message("Preparing output...")

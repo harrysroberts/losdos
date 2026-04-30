@@ -15,7 +15,6 @@ Imports:
     sf,
     tidyr,
     rlang,
-    dodgr,
-    igraph
+    dodgr
 Suggests:
     testthat (>= 3.0.0)

@@ -39,7 +39,6 @@
 #' @import sf
 #' @import dplyr
 #' @import tidyr
-#' @import rlang
 #' @import stringr
 create_base_network <- function(walk_speed, bike_speed, links, nodes) {
   
