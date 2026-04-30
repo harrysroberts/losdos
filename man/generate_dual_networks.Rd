@@ -4,7 +4,7 @@
 \alias{generate_dual_networks}
 \title{Generate dual graph representations of each augmented modal network}
 \usage{
-generate_dual_networks(augmented_networks)
+generate_dual_networks(augmented_networks, links, nodes, turn_restrictions)
 }
 \arguments{
 \item{augmented_networks}{A named list containing:
@@ -14,6 +14,12 @@ generate_dual_networks(augmented_networks)
 \item car:  a list of augmented car networks for each time period
 "Augmented" in this case meaning with origin and destination links attached
 }}
+
+\item{links}{An \code{sf} object of OSMRN links}
+
+\item{nodes}{An \code{sf} object of OSMRN nodes}
+
+\item{turn_restrictions}{An \code{sf} object of OSMRN turn restrictions}
 }
 \value{
 A named list containing:

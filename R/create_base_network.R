@@ -21,6 +21,8 @@
 #'    Defaults to 4.824 km/h as used by MatSim.
 #' @param bike_speed Numeric. Assumed bike speed in kilometres per hour. 
 #'    Defaults to 21.636 km/h as used by MatSim.
+#' @param links An `sf` object of OSMRN links
+#' @param nodes An `sf` object of OSMRN nodes
 #'       
 #' @return A data frame (geometry dropped) with columns:
 #'   `from_node`, `to_node`, `distance`, `walk`, and per‑period `bike_*`, `car_*`.
@@ -39,7 +41,7 @@
 #' @import tidyr
 #' @import rlang
 #' @import stringr
-create_base_network <- function(walk_speed, bike_speed) {
+create_base_network <- function(walk_speed, bike_speed, links, nodes) {
   
   # ------------------------------------------------------------
   # Process inputs
@@ -47,13 +49,6 @@ create_base_network <- function(walk_speed, bike_speed) {
   
   walk_speed <- as.numeric(walk_speed)*1000/60 #convert to m/min
   bike_speed <- as.numeric(bike_speed)*1000/60 #convert to m/min
-  
-  # ------------------------------------------------------------
-  # Load network links and join with node coordinates extracted from
-  # ------------------------------------------------------------
-  
-  links <- read_sf("input/processed/links.gpkg")
-  nodes <- read_sf("input/processed/nodes.gpkg")
   
   # ------------------------------------------------------------
   # Attach start and end node geometries

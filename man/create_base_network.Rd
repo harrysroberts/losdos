@@ -4,7 +4,7 @@
 \alias{create_base_network}
 \title{Build base directed network with walk/bike/car times (OS-MRN)}
 \usage{
-create_base_network(walk_speed, bike_speed)
+create_base_network(walk_speed, bike_speed, links, nodes)
 }
 \arguments{
 \item{walk_speed}{Numeric. Assumed walk speed in kilometres per hour.
@@ -12,6 +12,10 @@ Defaults to 4.824 km/h as used by MatSim.}
 
 \item{bike_speed}{Numeric. Assumed bike speed in kilometres per hour.
 Defaults to 21.636 km/h as used by MatSim.}
+
+\item{links}{An \code{sf} object of OSMRN links}
+
+\item{nodes}{An \code{sf} object of OSMRN nodes}
 }
 \value{
 A data frame (geometry dropped) with columns:

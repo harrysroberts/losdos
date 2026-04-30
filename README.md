@@ -61,11 +61,7 @@ trips <- data.frame(
 )
 
 # Compute mode and time-specific attributes
-results <- osmrn_trip_attributes(
-  trips,
-  walk_speed = 4.824,      # km/h (default MatSim value)
-  bike_speed = 21.636      # km/h (default MatSim value)
-)
+results <- osmrn_trip_attributes(trips)
 
 # View output
 results
@@ -99,9 +95,7 @@ destinations <- data.frame(
 results <- osmrn_matrix_attributes(
   origins,
   destinations,
-  periods =  c("MoFr09001200", "MoFr19002200", "SaSu14001900"),
-  walk_speed = 4.824,      # km/h (default MatSim value)
-  bike_speed = 21.636      # km/h (default MatSim value)
+  periods =  c("MoFr09001200", "MoFr19002200", "SaSu14001900")
 )
 
 # View output

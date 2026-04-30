@@ -50,7 +50,7 @@
 #'  results <- osmrn_matrix_attributes(
 #'    origins,
 #'    destinations,
-#'    periods = c("MoFr09001200", "SaSu14001900")
+#'    periods = c("MoFr09001200", "MoFr19002200", "SaSu14001900")
 #'  )
 #'
 #' }
@@ -129,6 +129,10 @@ osmrn_matrix_attributes <- function(
     message("Error: Please add the osmrn.gpkg and boundary.gpkg files to the input directory.")
   }
   
+  links <- st_read("input/processed/links.gpkg", quiet = TRUE)
+  nodes <- st_read("input/processed/nodes.gpkg", quiet = TRUE)
+  turn_restrictions <- st_read("input/processed/turn_restrictions.gpkg", quiet = TRUE)
+  
   # ----------------------------
   # 2) Create base network
   # ----------------------------
@@ -136,7 +140,9 @@ osmrn_matrix_attributes <- function(
   message("Creating base network...")
   base_network <- create_base_network(
     walk_speed = walk_speed,
-    bike_speed = bike_speed
+    bike_speed = bike_speed,
+    links = links,
+    nodes = nodes
   )
   
   # ----------------------------
@@ -191,7 +197,12 @@ osmrn_matrix_attributes <- function(
   # ----------------------------
   
   message("Creating dual representations of each network")
-  dual_networks <- generate_dual_networks(augmented_networks)
+  dual_networks <- generate_dual_networks(
+    augmented_networks,
+    links,
+    nodes,
+    turn_restrictions
+    )
   
   # ----------------------------
   # 7) Compute distance and time matrices for each mode and time period

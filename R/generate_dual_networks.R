@@ -10,6 +10,9 @@
 #'   - bike: a list of augmented bike networks for each time period
 #'   - car:  a list of augmented car networks for each time period
 #'   "Augmented" in this case meaning with origin and destination links attached
+#' @param links An `sf` object of OSMRN links
+#' @param nodes An `sf` object of OSMRN nodes
+#' @param turn_restrictions An `sf` object of OSMRN turn restrictions
 #'
 #' @return A named list containing:
 #'   - walk: a single dual walk network
@@ -22,22 +25,18 @@
 #' @import dplyr
 #' @import purrr
 #' @import stringr
-generate_dual_networks <- function(augmented_networks) {
+generate_dual_networks <- function(
+    augmented_networks,
+    links,
+    nodes,
+    turn_restrictions
+    ) {
   
   # ------------------------------------------------------------
   # Define time periods present in the augmented networks
   # ------------------------------------------------------------
   
   time_periods <- names(augmented_networks$bike)
-  
-  # ------------------------------------------------------------
-  # Import the datasets from OS MRN
-  # ------------------------------------------------------------
-  
-  links <- st_read("input/processed/links.gpkg")
-  nodes <- st_read("input/processed/nodes.gpkg")
-  turn_restrictions <- st_read("input/processed/turn_restrictions.gpkg")
-  
   
   # ------------------------------------------------------------
   # Convert turn restrictions into dual network format

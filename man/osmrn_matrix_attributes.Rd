@@ -66,7 +66,7 @@ graph is weighted by time for routing; distance is summed along the same path).
  results <- osmrn_matrix_attributes(
    origins,
    destinations,
-   periods = c("MoFr09001200", "SaSu14001900")
+   periods = c("MoFr09001200", "MoFr19002200", "SaSu14001900")
  )
 
 }

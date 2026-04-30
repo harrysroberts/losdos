@@ -29,22 +29,19 @@
 #' \dontrun{
 #'  # Requires OSMRN data files in input/raw/ directory
 #'  trips <- data.frame(
-#'    id = c(1, 2),
-#'    period = c("MoFr09001200", "MoFr09001200"),
-#'    from_easting = c(432500, 432600),
-#'    from_northing = c(434200, 434300),
-#'    to_easting = c(432700, 432800),
-#'    to_northing = c(434400, 434500)
+#'    id = c(1, 2, 3),
+#'    period = c("MoFr09001200", "MoFr19002200", "SaSu14001900"),
+#'    from_easting = c(429180, 427750, 435741),
+#'    from_northing = c(434731, 435747, 432124),
+#'    to_easting = c(429906, 430454, 430731),
+#'    to_northing = c(433271, 433532, 441858)
 #'  )
 #'  
-#'  results <- osmrn_trip_attributes(
-#'    trips,
-#'    walk_speed = 4.824,
-#'    bike_speed = 21.636
-#'  )
+#'  results <- osmrn_trip_attributes(trips)
 #' }
 #'
 #' @import dplyr
+#' @import sf
 #'
 #' @export
 osmrn_trip_attributes <- function(
@@ -106,6 +103,10 @@ osmrn_trip_attributes <- function(
     message("Error: Please add the osmrn.gpkg and boundary.gpkg files to the input directory.")
   }
   
+  links <- st_read("input/processed/links.gpkg", quiet = TRUE)
+  nodes <- st_read("input/processed/nodes.gpkg", quiet = TRUE)
+  turn_restrictions <- st_read("input/processed/turn_restrictions.gpkg", quiet = TRUE)
+  
   # ----------------------------
   # 2) Create base network
   # ----------------------------
@@ -113,7 +114,9 @@ osmrn_trip_attributes <- function(
   message("Creating base network...")
   base_network <- create_base_network(
     walk_speed = walk_speed,
-    bike_speed = bike_speed
+    bike_speed = bike_speed,
+    links = links,
+    nodes = nodes
   )
   
   # ----------------------------
@@ -176,7 +179,12 @@ osmrn_trip_attributes <- function(
   # ----------------------------
   
   message("Creating dual representations of each network")
-  dual_networks <- generate_dual_networks(augmented_networks)
+  dual_networks <- generate_dual_networks(
+    augmented_networks,
+    links,
+    nodes,
+    turn_restrictions
+    )
   
   # ----------------------------
   # 7) Compute distance and time by each mode for each trip
