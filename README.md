@@ -28,6 +28,15 @@ You will need:
 - OSMRN data files: `osmrn.gpkg` — OS Multimodal Routing Network (GeoPackage format)
 - Study area boundary `boundary.gpkg` —  (GeoPackage format, EPSG:27700 (BNG))
 
+### OSMRN Dataset
+
+This package is designed to work with the Multimodal Routing Network, published by the Ordnance Survey. **The dataset is not included in this package** and must be obtained separately by the user.
+
+- **Source:** [Official website](https://docs.os.uk/os-downloads/products/transport-network-portfolio/os-multi-modal-routing-network)
+  -  It is also available for educational and research purposes through the [EDINA Digimap platform](https://digimap.edina.ac.uk/)
+- **License:** Use of the dataset is subject to the Ordnance Survey's licensing terms. **Users are responsible for reviewing and complying with these terms.**
+- **Format expected:** The package expects the dataset in Geopackage format as published, with no further adjustment by the user.
+
 ### Install from GitHub
 
 ```r
@@ -222,16 +231,26 @@ as implement in [MATSim](https://github.com/matsim-org) by Horni et al. (2016) d
 
 ## Citation
 
-If you use this package in your research, please cite both the paper 
-describing the method and the software itself:
+If you use this package in your research, the following citations are appreciated:
 
-**Paper:**
+**Paper describing the method:**
 
  Roberts, H. S., Calastri, C., Batley, R. (under review) "Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling". Manuscript submitted for publication.
 
-**Software:**
+**This software:**
 
 Roberts, H.S. (2026) “losdos”. Zenodo. doi:10.5281/zenodo.21222208.
+
+**Dependency:**
+
+This package builds on [dodgr](https://github.com/UrbanAnalyst/dodgr). Please also cite:
+Padgham, M. (2019) "dodgr: An R package for network flow aggregation." Transport Findings, 2(14). doi:10.32866/6945
+
+**OSMRN dataset:**
+
+This package is intended to be used in conjunction with the Ordnance Survey Multimodal Routing Network. Users of this dataset are encouraged to cite their use of this dataset.
+
+Ordnance Survey (2026) "Multi-modal Routing Network". url:https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network 
 
 **BibTeX:**
 
@@ -252,6 +271,24 @@ Roberts, H.S. (2026) “losdos”. Zenodo. doi:10.5281/zenodo.21222208.
   version      = {v1.0.0},
   doi          = {10.5281/zenodo.21222208},
   url          = {https://doi.org/10.5281/zenodo.21222208},
+}
+
+@Article{padgham_2019_dodgr,
+  journal = {Transport Findings},
+  doi = {10.32866/6945},
+  publisher = {Network Design Lab},
+  title = {dodgr: An R package for network flow aggregation},
+  author = {{Mark Padgham}},
+  year = {2019},
+  month = {2},
+}
+
+@misc{ordnance_survey_multi-modal_2026,
+    title = {Multi-modal {Routing} {Network}},
+    url = {https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network},
+    urldate = {2026-03-18},
+    author = {{Ordnance Survey}},
+    year = {2026},
 }
 ```
 ## License
