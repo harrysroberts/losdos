@@ -1,10 +1,13 @@
 # losdos
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21222208.svg)](https://doi.org/10.5281/zenodo.21222208)
+
 **L**evel-**o**f-**s**ervice attribute estimation using _**d**odgr_ with the **O**rdnance **S**urvey Multimodal Routing Network.
 
-## Overview
-
 `losdos` is an R package that computes distance and time estimates for origin-destination pairs across multiple transportation modes (walk, bicycle, and car) using the UK Ordnance Survey Multimodal Routing Network (OSMRN). 
+
+This method is described in detail in the paper:
+> Roberts, H. S., Calastri, C., Batley, R. (under review) "Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling". Manuscript submitted for publication.
 
 The package incorporates:
 
@@ -217,6 +220,40 @@ The package implements models from:
 
 as implement in [MATSim](https://github.com/matsim-org) by Horni et al. (2016) doi: [10.5334/baw](https://doi.org/10.5334/baw)
 
+## Citation
+
+If you use this package in your research, please cite both the paper 
+describing the method and the software itself:
+
+**Paper:**
+
+ Roberts, H. S., Calastri, C., Batley, R. (under review) "Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling". Manuscript submitted for publication.
+
+**Software:**
+
+Roberts, H.S. (2026) “losdos”. Zenodo. doi:10.5281/zenodo.21222208.
+
+**BibTeX:**
+
+```bibtex
+@article{roberts_under_review_evaluating,
+  author = {Roberts, Harry Samuel and Calastri, Chiara and Batley, Richard},
+  title  = {{Paper Title}},
+  year   = {under review},
+  note   = {Manuscript submitted for publication}
+}
+
+@software{roberts_2026_21222208,
+  author       = {Roberts, Harry Samuel},
+  title        = {losdos},
+  month        = jul,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v1.0.0},
+  doi          = {10.5281/zenodo.21222208},
+  url          = {https://doi.org/10.5281/zenodo.21222208},
+}
+```
 ## License
 
 MIT License. See LICENSE file for details.
