@@ -7,3 +7,5 @@
 ^\.github$
 ^\.DS_Store$
 ^Thumbs\.db$
+^\.positai$
+^\.claude$

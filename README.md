@@ -243,7 +243,8 @@ Roberts, H.S. (2026) “losdos”. Zenodo. doi:10.5281/zenodo.21222208.
 
 **Dependency:**
 
-This package builds on [dodgr](https://github.com/UrbanAnalyst/dodgr). Please also cite:
+This package builds on [dodgr](https://github.com/UrbanAnalyst/dodgr). Please also cite that package.
+
 Padgham, M. (2019) "dodgr: An R package for network flow aggregation." Transport Findings, 2(14). doi:10.32866/6945
 
 **OSMRN dataset:**
@@ -256,39 +257,39 @@ Ordnance Survey (2026) "Multi-modal Routing Network". url:https://www.ordnancesu
 
 ```bibtex
 @article{roberts_under_review_evaluating,
-  author = {Roberts, Harry Samuel and Calastri, Chiara and Batley, Richard},
-  title  = {{Paper Title}},
-  year   = {under review},
-  note   = {Manuscript submitted for publication}
+  author      = {Roberts, Harry Samuel and Calastri, Chiara and Batley, Richard},
+  title       = {{Paper Title}},
+  year        = {under review},
+  note        = {Manuscript submitted for publication}
 }
 
 @software{roberts_2026_21222208,
-  author       = {Roberts, Harry Samuel},
-  title        = {losdos},
-  month        = jul,
-  year         = 2026,
-  publisher    = {Zenodo},
-  version      = {v1.0.0},
-  doi          = {10.5281/zenodo.21222208},
-  url          = {https://doi.org/10.5281/zenodo.21222208},
+  author      = {Roberts, Harry Samuel},
+  title       = {losdos},
+  month       = jul,
+  year        = 2026,
+  publisher   = {Zenodo},
+  version     = {v1.0.0},
+  doi         = {10.5281/zenodo.21222208},
+  url         = {https://doi.org/10.5281/zenodo.21222208},
 }
 
 @Article{padgham_2019_dodgr,
-  journal = {Transport Findings},
-  doi = {10.32866/6945},
-  publisher = {Network Design Lab},
-  title = {dodgr: An R package for network flow aggregation},
-  author = {{Mark Padgham}},
-  year = {2019},
-  month = {2},
+  journal     = {Transport Findings},
+  doi         = {10.32866/6945},
+  publisher   = {Network Design Lab},
+  title       = {dodgr: An R package for network flow aggregation},
+  author      = {{Mark Padgham}},
+  year        = {2019},
+  month       = {2},
 }
 
 @misc{ordnance_survey_multi-modal_2026,
-    title = {Multi-modal {Routing} {Network}},
-    url = {https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network},
-    urldate = {2026-03-18},
-    author = {{Ordnance Survey}},
-    year = {2026},
+  title       = {Multi-modal {Routing} {Network}},
+  url         = {https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network},
+  urldate     = {2026-03-18},
+  author      = {{Ordnance Survey}},
+  year        = {2026},
 }
 ```
 ## License

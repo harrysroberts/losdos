@@ -1,0 +1,45 @@
+
+citHeader("To cite losdos in publications, please use:")
+
+citEntry(
+  entry    = "Misc",
+  title    = "losdos",
+  author   = person(given ="Harry Samuel", family = "Roberts"),
+  version  = "v1.0.0",
+  year     = "2026",
+  doi      = "10.5281/zenodo.21222208",
+  url      = "https://doi.org/10.5281/zenodo.21222208",
+  textVersion = paste(
+    "Roberts, H.S. (2026).",
+    "losdos.",
+    "Zenodo.",
+    "https://doi.org/10.5281/zenodo.21222208"
+  )
+)
+
+citEntry(
+  entry    = "Unpublished",
+  title    = "Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling",
+  author   = c(
+    person(given ="Harry Samuel", family = "Roberts"),
+    person(given = "Chiara", family = "Calastri"),
+    person(given = "Richard", family = "Batley")
+  ),
+  year     = "under review",
+  note     = "Manuscript submitted for publication",
+  textVersion = paste(
+    "Roberts, H.S., Calastri, C., and Batley, R.",
+    "(under review).",
+    "\"Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling\".",
+    "Manuscript submitted for publication."
+  )
+)
+
+citFooter(
+  paste(
+  "This package builds on the dodgr package. Please also cite that package.",
+  "Padgham, M. (2019). \"dodgr: An R package for network flow aggregation\". Transport Findings, 2(14). doi:10.32866/6945.",
+  "This package is intended to be used in conjunction with the Ordnance Survey Multimodal Routing Network. Users of this dataset are encouraged to cite their use of this dataset.",
+  "Ordnance Survey (2026). \"Multi-modal Routing Network\". url:https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network."
+  )
+)
