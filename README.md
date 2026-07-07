@@ -258,7 +258,7 @@ Ordnance Survey (2026) "Multi-modal Routing Network". url:https://www.ordnancesu
 ```bibtex
 @article{roberts_under_review_evaluating,
   author      = {Roberts, Harry Samuel and Calastri, Chiara and Batley, Richard},
-  title       = {{Paper Title}},
+  title       = {Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling},
   year        = {under review},
   note        = {Manuscript submitted for publication}
 }
