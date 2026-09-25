@@ -235,59 +235,53 @@ If you use this package in your research, the following citations are appreciate
 
 **Paper describing the method:**
 
- Roberts, H. S., Calastri, C., Batley, R. (under review) "Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling". Manuscript submitted for publication.
+> Roberts, H. S., Calastri, C., Batley, R. (2026). Evaluating open-source approaches for estimating unobserved trip attributes in transport choice modelling. In: _Proceedings of the 58th Universities’ Transport Study Group Annual Conference_. Guildford, UK.
 
 **This software:**
 
-Roberts, H.S. (2026) “losdos”. Zenodo. doi:10.5281/zenodo.21222208.
+> Roberts, H. S. 2026. losdos. Available from: https://doi.org/10.5281/zenodo.21224724.
 
 **Dependency:**
 
 This package builds on [dodgr](https://github.com/UrbanAnalyst/dodgr). Please also cite that package.
 
-Padgham, M. (2019) "dodgr: An R package for network flow aggregation." Transport Findings, 2(14). doi:10.32866/6945
+> Padgham, M. 2019. dodgr: An R package for network flow aggregation. _Transport Findings_.
 
 **OSMRN dataset:**
 
 This package is intended to be used in conjunction with the Ordnance Survey Multimodal Routing Network. Users of this dataset are encouraged to cite their use of this dataset.
 
-Ordnance Survey (2026) "Multi-modal Routing Network". url:https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network 
+Ordnance Survey. 2026. Multi-modal Routing Network. Available from: https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network 
 
 **BibTeX:**
 
 ```bibtex
-@article{roberts_under_review_evaluating,
-  author      = {Roberts, Harry Samuel and Calastri, Chiara and Batley, Richard},
-  title       = {Evaluating open-source approaches for estimating level-of-service attributes in transport choice modelling},
-  year        = {under review},
-  note        = {Manuscript submitted for publication}
+@inproceedings{roberts2026evaluating,
+  author       = {Roberts, H. S. and Calastri, C. and Batley, R.},
+  title        = {Evaluating Open-Source Approaches for Estimating Unobserved Trip Attributes in Transport Choice Modelling},
+  booktitle    = {Proceedings of the 58th Universities' Transport Study Group Annual Conference},
+  year         = {2026},
+  address      = {Guildford, UK},
 }
 
 @software{roberts_2026_21222208,
   author      = {Roberts, Harry Samuel},
   title       = {losdos},
-  month       = jul,
   year        = 2026,
-  publisher   = {Zenodo},
   version     = {v1.0.0},
-  doi         = {10.5281/zenodo.21222208},
   url         = {https://doi.org/10.5281/zenodo.21222208},
 }
 
 @Article{padgham_2019_dodgr,
   journal     = {Transport Findings},
-  doi         = {10.32866/6945},
-  publisher   = {Network Design Lab},
   title       = {dodgr: An R package for network flow aggregation},
   author      = {{Mark Padgham}},
   year        = {2019},
-  month       = {2},
 }
 
 @misc{ordnance_survey_multi-modal_2026,
   title       = {Multi-modal {Routing} {Network}},
   url         = {https://www.ordnancesurvey.co.uk/products/os-multi-modal-routing-network},
-  urldate     = {2026-03-18},
   author      = {{Ordnance Survey}},
   year        = {2026},
 }
